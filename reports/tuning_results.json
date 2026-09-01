@@ -1,0 +1,39 @@
+[
+  {
+    "model": "XGBoost",
+    "best_params": {
+      "model__subsample": 0.7,
+      "model__n_estimators": 400,
+      "model__max_depth": 6,
+      "model__learning_rate": 0.03
+    },
+    "RMSE": 84.48832667149942,
+    "MAE": 48.34958267211914,
+    "R2": 0.4528542757034302,
+    "MAPE": 0.36129263043403625
+  },
+  {
+    "model": "ExtraTrees",
+    "best_params": {
+      "model__n_estimators": 200,
+      "model__min_samples_leaf": 4,
+      "model__max_depth": 15
+    },
+    "RMSE": 84.56605744937397,
+    "MAE": 48.3854512932968,
+    "R2": 0.4518470097789643,
+    "MAPE": 0.3627123363842693
+  },
+  {
+    "model": "RandomForest",
+    "best_params": {
+      "model__n_estimators": 300,
+      "model__min_samples_leaf": 4,
+      "model__max_depth": 20
+    },
+    "RMSE": 84.9848297058603,
+    "MAE": 48.64177622639399,
+    "R2": 0.44640464573755734,
+    "MAPE": 0.3645410160855755
+  }
+]

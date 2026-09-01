@@ -125,9 +125,9 @@ with tab1:
 
     st.subheader("Carte des annonces")
     sample = df.sample(min(3000, len(df)), random_state=1)
-    fig3 = px.scatter_mapbox(
+    fig3 = px.scatter_map(
         sample, lat="latitude", lon="longitude", color="price",
-        size_max=8, zoom=10, mapbox_style="open-street-map",
+        size_max=8, zoom=10, map_style="open-street-map",
         color_continuous_scale="viridis", range_color=[0, 400],
         hover_data=["neighbourhood_group", "room_type"],
     )
@@ -281,14 +281,14 @@ with tab3:
                 (nearby["latitude"] - sel_lat) ** 2 + (nearby["longitude"] - sel_lon) ** 2
             ) * 111
             nearby = nearby.sort_values("dist_km").head(200)
-            fig5 = px.scatter_mapbox(
+            fig5 = px.scatter_map(
                 nearby, lat="latitude", lon="longitude", color="price",
-                zoom=13, mapbox_style="open-street-map",
+                zoom=13, map_style="open-street-map",
                 center={"lat": sel_lat, "lon": sel_lon},
                 color_continuous_scale="viridis",
                 hover_data=["neighbourhood_group", "room_type", "price"],
             )
-            fig5.add_scattermapbox(
+            fig5.add_scattermap(
                 lat=[sel_lat], lon=[sel_lon], mode="markers",
                 marker=dict(size=16, color="red"), name="Position choisie",
             )

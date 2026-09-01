@@ -109,17 +109,32 @@ def main():
     results = []
     fitted_pipelines = {}
 
+    # SVR a une complexite O(n^2) a O(n^3) : sur ~39000 lignes l'entrainement
+    # devient trop lent pour ce TP. On l'entraine sur un sous-echantillon
+    # (limite assumee et documentee dans le rapport), en gardant l'evaluation
+    # sur le vrai jeu de test complet.
+    SUBSAMPLE_MODELS = {"SVR": 6000}
+
     for name, model in models.items():
         t0 = time.time()
         pipe = Pipeline([("prep", preprocessor), ("model", model)])
 
+        if name in SUBSAMPLE_MODELS:
+            n = SUBSAMPLE_MODELS[name]
+            X_fit = X_train.sample(n=min(n, len(X_train)), random_state=RANDOM_STATE)
+            y_fit = y_train.loc[X_fit.index]
+            cv_fold = KFold(n_splits=3, shuffle=True, random_state=RANDOM_STATE)
+        else:
+            X_fit, y_fit = X_train, y_train
+            cv_fold = cv
+
         cv_res = cross_validate(
-            pipe, X_train, y_train, cv=cv,
+            pipe, X_fit, y_fit, cv=cv_fold,
             scoring=["neg_root_mean_squared_error", "neg_mean_absolute_error", "r2"],
             n_jobs=-1,
         )
 
-        pipe.fit(X_train, y_train)
+        pipe.fit(X_fit, y_fit)
         y_pred = pipe.predict(X_test)
         test_metrics = evaluate(y_test, y_pred)
         elapsed = time.time() - t0

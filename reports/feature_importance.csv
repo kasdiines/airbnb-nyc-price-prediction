@@ -1,0 +1,22 @@
+feature,importance
+cat__room_type_Entire home/apt,0.5950658
+num__distance_center_km,0.04532407
+num__longitude,0.037076876
+num__reviews_per_listing,0.035510466
+num__availability_365,0.034312524
+num__minimum_nights,0.028619831
+num__calculated_host_listings_count,0.028099211
+num__number_of_reviews,0.022673843
+cat__neighbourhood_group_Manhattan,0.021972097
+num__neighbourhood_freq,0.021297794
+num__days_since_last_review,0.02019309
+num__latitude,0.019539483
+num__reviews_per_month,0.018767875
+cat__neighbourhood_group_Staten Island,0.016568866
+cat__room_type_Shared room,0.01410594
+cat__room_type_Private room,0.012787243
+cat__neighbourhood_group_Queens,0.011552255
+cat__neighbourhood_group_Brooklyn,0.008913124
+cat__neighbourhood_group_Bronx,0.007619656
+num__is_multi_listing_host,0.0
+num__availability_ratio,0.0
