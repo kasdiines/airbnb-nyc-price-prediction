@@ -4,5 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 data/airbnb_clean.csv
 reports/streamlit_log.txt
+reports/gh_auth_log.txt
+reports/rapport_final.docx
 ~$*.docx
 *.pdf

@@ -9,7 +9,7 @@ title: "Prédiction des prix de location Airbnb à New York City"
 Auteur : Ines Kasdi
 Formation : M1 I2A
 Année universitaire : 2025-2026
-Dépôt GitHub : {{GITHUB_URL}}
+Dépôt GitHub : https://github.com/kasdiines/airbnb-nyc-price-prediction
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -972,7 +972,7 @@ pédagogique de ce projet.
 
 **Dépôt du code source**
 
-13. Dépôt GitHub du projet : {{GITHUB_URL}}
+13. Dépôt GitHub du projet : https://github.com/kasdiines/airbnb-nyc-price-prediction
 
 ---
 
