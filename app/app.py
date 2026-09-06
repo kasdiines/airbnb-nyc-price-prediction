@@ -215,20 +215,38 @@ with tab3:
         st.caption("Clique sur la carte pour choisir la position du logement (latitude/longitude).")
 
         default_lat, default_lon = 40.73, -73.95
-        m = folium.Map(location=[default_lat, default_lon], zoom_start=11)
+        if "sel_lat" not in st.session_state:
+            st.session_state["sel_lat"] = default_lat
+            st.session_state["sel_lon"] = default_lon
+
+        m = folium.Map(
+            location=[st.session_state["sel_lat"], st.session_state["sel_lon"]],
+            zoom_start=11,
+        )
         sample_map = df.sample(min(1500, len(df)), random_state=2)
         for _, row in sample_map.iterrows():
             folium.CircleMarker(
                 location=[row["latitude"], row["longitude"]],
                 radius=2, color="#2563eb", fill=True, fill_opacity=0.4,
             ).add_to(m)
-        map_data = st_folium(m, height=420, width=700)
+        folium.Marker(
+            location=[st.session_state["sel_lat"], st.session_state["sel_lon"]],
+            icon=folium.Icon(color="red", icon="home"),
+            tooltip="Position selectionnee",
+        ).add_to(m)
+
+        # key= fixe : sans cela, la carte etant reconstruite a chaque interaction
+        # (changement de champ, clic sur un bouton), Streamlit la traite comme un
+        # nouveau composant et efface la position cliquee avant qu'elle soit utilisee.
+        map_data = st_folium(m, height=420, width=700, key="carte_test")
 
         if map_data and map_data.get("last_clicked"):
-            sel_lat = map_data["last_clicked"]["lat"]
-            sel_lon = map_data["last_clicked"]["lng"]
-        else:
-            sel_lat, sel_lon = default_lat, default_lon
+            st.session_state["sel_lat"] = map_data["last_clicked"]["lat"]
+            st.session_state["sel_lon"] = map_data["last_clicked"]["lng"]
+
+        sel_lat = st.session_state["sel_lat"]
+        sel_lon = st.session_state["sel_lon"]
+        st.caption(f"Position selectionnee : latitude {sel_lat:.4f}, longitude {sel_lon:.4f}")
 
         c1, c2, c3 = st.columns(3)
         neighbourhood_group = c1.selectbox("Arrondissement", sorted(df["neighbourhood_group"].unique()))
