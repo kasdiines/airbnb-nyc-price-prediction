@@ -215,9 +215,22 @@ with tab3:
         st.caption("Clique sur la carte pour choisir la position du logement (latitude/longitude).")
 
         default_lat, default_lon = 40.73, -73.95
+
+        def nearest_listing(lat, lon):
+            """Renvoie (arrondissement, quartier, frequence du quartier)
+            de l'annonce la plus proche du point donne."""
+            dist2 = (df["latitude"] - lat) ** 2 + (df["longitude"] - lon) ** 2
+            row = df.loc[dist2.idxmin()]
+            return row["neighbourhood_group"], row["neighbourhood"], row["neighbourhood_freq"]
+
         if "sel_lat" not in st.session_state:
             st.session_state["sel_lat"] = default_lat
             st.session_state["sel_lon"] = default_lon
+            grp, quartier, freq = nearest_listing(default_lat, default_lon)
+            st.session_state["neighbourhood_group_select"] = grp
+            st.session_state["quartier_detecte"] = quartier
+            st.session_state["neighbourhood_freq_detectee"] = freq
+            st.session_state["last_processed_click"] = None
 
         m = folium.Map(
             location=[st.session_state["sel_lat"], st.session_state["sel_lon"]],
@@ -241,15 +254,31 @@ with tab3:
         map_data = st_folium(m, height=420, width=700, key="carte_test")
 
         if map_data and map_data.get("last_clicked"):
-            st.session_state["sel_lat"] = map_data["last_clicked"]["lat"]
-            st.session_state["sel_lon"] = map_data["last_clicked"]["lng"]
+            clicked = (map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"])
+            if clicked != st.session_state.get("last_processed_click"):
+                # Nouveau clic (pas juste un rerun du a un autre widget) :
+                # on met a jour la position ET on deduit automatiquement
+                # l'arrondissement / le quartier les plus proches.
+                st.session_state["last_processed_click"] = clicked
+                st.session_state["sel_lat"], st.session_state["sel_lon"] = clicked
+                grp, quartier, freq = nearest_listing(*clicked)
+                st.session_state["neighbourhood_group_select"] = grp
+                st.session_state["quartier_detecte"] = quartier
+                st.session_state["neighbourhood_freq_detectee"] = freq
 
         sel_lat = st.session_state["sel_lat"]
         sel_lon = st.session_state["sel_lon"]
-        st.caption(f"Position selectionnee : latitude {sel_lat:.4f}, longitude {sel_lon:.4f}")
+        st.caption(
+            f"Position selectionnee : latitude {sel_lat:.4f}, longitude {sel_lon:.4f} "
+            f"— quartier le plus proche : **{st.session_state['quartier_detecte']}**"
+        )
 
         c1, c2, c3 = st.columns(3)
-        neighbourhood_group = c1.selectbox("Arrondissement", sorted(df["neighbourhood_group"].unique()))
+        neighbourhood_group = c1.selectbox(
+            "Arrondissement", sorted(df["neighbourhood_group"].unique()),
+            key="neighbourhood_group_select",
+            help="Deduit automatiquement du point clique sur la carte ; modifiable a la main.",
+        )
         room_type = c2.selectbox("Type de logement", sorted(df["room_type"].unique()))
         minimum_nights = c3.number_input("Nuits minimum", 1, 365, 3)
 
@@ -265,9 +294,17 @@ with tab3:
         from src.preprocessing import haversine_distance, CENTER_LAT, CENTER_LON
 
         if st.button("Predire le prix", type="primary"):
-            neighbourhood_freq = df.loc[
-                df["neighbourhood_group"] == neighbourhood_group, "neighbourhood_freq"
-            ].mean()
+            # Si l'arrondissement affiche est bien celui deduit du clic, on utilise
+            # la frequence precise du quartier le plus proche (plus fiable) ;
+            # si l'utilisateur a choisi un autre arrondissement a la main, on
+            # retombe sur la moyenne de cet arrondissement.
+            detected_group, _, _ = nearest_listing(sel_lat, sel_lon)
+            if neighbourhood_group == detected_group:
+                neighbourhood_freq = st.session_state["neighbourhood_freq_detectee"]
+            else:
+                neighbourhood_freq = df.loc[
+                    df["neighbourhood_group"] == neighbourhood_group, "neighbourhood_freq"
+                ].mean()
             input_row = pd.DataFrame([{
                 "minimum_nights": minimum_nights,
                 "number_of_reviews": number_of_reviews,
