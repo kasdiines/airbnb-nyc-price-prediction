@@ -1,10 +1,12 @@
-venv/
-__pycache__/
+*.pdf
 *.pyc
 .ipynb_checkpoints/
+__pycache__/
 data/airbnb_clean.csv
-reports/streamlit_log.txt
+node_modules/
+presentation/*.pdf
 reports/gh_auth_log.txt
 reports/rapport_final.docx
+reports/streamlit_log.txt
+venv/
 ~$*.docx
-*.pdf
