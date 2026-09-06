@@ -28,6 +28,8 @@ import folium
 from streamlit_folium import st_folium
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
+
 DATA_PATH = BASE_DIR / "data" / "airbnb_clean.csv"
 MODELS_DIR = BASE_DIR / "models"
 
