@@ -236,7 +236,52 @@ function bulletBlock(slide, items, opts = {}) {
 }
 
 // =====================================================================
-// SLIDE 5 - DATASET
+// SLIDE 5 - VEILLE SCIENTIFIQUE ET TECHNIQUE
+// =====================================================================
+{
+  const s = pres.addSlide();
+  bgFill(s, WHITE);
+  kicker(s, "02 . Veille scientifique");
+  title(s, "Etat de l'art et choix technologiques");
+
+  s.addText("Revue de littérature", {
+    x: 0.6, y: 1.85, w: 5.9, h: 0.35, isTextBox: true, margin: 0,
+    fontFace: "Cambria", bold: true, fontSize: 16, color: NAVY,
+  });
+  bulletBlock(s, [
+    "Régression hédonique classique : simple mais ne capture pas les interactions (ex. l'effet du quartier dépend du type de logement).",
+    "Breiman (2001, Random Forest) et Chen & Guestrin (2016, XGBoost) : les ensembles d'arbres dominent sur données tabulaires.",
+    "Littérature sur ce même dataset : R² généralement entre 0,5 et 0,65 sans variables textuelles/visuelles — confirme la limite structurelle attendue.",
+  ], { x: 0.6, y: 2.25, w: 5.9, h: 4.3, fontSize: 12.5, spaceAfter: 14 });
+
+  s.addText("Technologies retenues", {
+    x: 6.85, y: 1.85, w: 5.9, h: 0.35, isTextBox: true, margin: 0,
+    fontFace: "Cambria", bold: true, fontSize: 16, color: NAVY,
+  });
+  const techs = [
+    ["scikit-learn", "pipelines, 12 modeles, validation croisee — standard du secteur"],
+    ["XGBoost", "boosting, etat de l'art sur donnees tabulaires"],
+    ["Streamlit", "interface interactive en pur Python, rapide a developper"],
+    ["Folium", "seule librairie testee permettant de capter un clic utilisateur sur la carte"],
+  ];
+  let ty = 2.3;
+  techs.forEach((t) => {
+    iconCircle(s, 6.85, ty, 0.42, "✓", { bg: CORAL, fontSize: 14 });
+    s.addText(t[0], {
+      x: 7.45, y: ty - 0.03, w: 5.3, h: 0.35, isTextBox: true, margin: 0,
+      fontFace: "Calibri", bold: true, fontSize: 13, color: INK,
+    });
+    s.addText(t[1], {
+      x: 7.45, y: ty + 0.3, w: 5.3, h: 0.6, isTextBox: true, margin: 0,
+      fontFace: "Calibri", fontSize: 11.5, color: MUTED,
+    });
+    ty += 1.05;
+  });
+  pageNumber(s, 5);
+}
+
+// =====================================================================
+// SLIDE 6 - DATASET
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -272,11 +317,11 @@ function bulletBlock(slide, items, opts = {}) {
       fontFace: "Calibri", fontSize: 13, color: WHITE,
     });
   });
-  pageNumber(s, 5);
+  pageNumber(s, 6);
 }
 
 // =====================================================================
-// SLIDE 6 - EDA
+// SLIDE 7 - EDA
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -293,11 +338,11 @@ function bulletBlock(slide, items, opts = {}) {
     { text: "Type de logement : ", options: { bold: true, color: NAVY } },
     { text: "un logement entier coute 2 a 3 fois plus qu'une chambre privee ou partagee.", options: { color: INK } },
   ], { x: 0.6, y: 5.55, w: 12, h: 1.2, isTextBox: true, margin: 0, fontFace: "Calibri", fontSize: 14, lineSpacing: 22 });
-  pageNumber(s, 6);
+  pageNumber(s, 7);
 }
 
 // =====================================================================
-// SLIDE 7 - PRETRAITEMENT / FEATURE ENGINEERING
+// SLIDE 8 - PRETRAITEMENT / FEATURE ENGINEERING
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -314,11 +359,11 @@ function bulletBlock(slide, items, opts = {}) {
   ], { x: 0.6, y: 2.0, w: 6.7, h: 4.3, fontSize: 13.5, spaceAfter: 14 });
 
   s.addImage({ path: FIG("04_heatmap_correlations.png"), x: 7.6, y: 1.85, w: 5.1, h: 4.9 });
-  pageNumber(s, 7);
+  pageNumber(s, 8);
 }
 
 // =====================================================================
-// SLIDE 8 - PIPELINE / ARCHITECTURE
+// SLIDE 9 - PIPELINE / ARCHITECTURE
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -363,11 +408,11 @@ function bulletBlock(slide, items, opts = {}) {
     x: 0.6, y: 5.3, w: 12, h: 0.5, isTextBox: true, margin: 0,
     fontFace: "Calibri", italic: true, fontSize: 13, color: MUTED, align: "center",
   });
-  pageNumber(s, 8);
+  pageNumber(s, 9);
 }
 
 // =====================================================================
-// SLIDE 9 - COMPARAISON DE 12 MODELES (native chart)
+// SLIDE 10 - COMPARAISON DE 12 MODELES (native chart)
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -409,11 +454,11 @@ function bulletBlock(slide, items, opts = {}) {
     x: 0.6, y: 6.9, w: 12, h: 0.4, isTextBox: true, margin: 0,
     fontFace: "Calibri", italic: true, fontSize: 12, color: MUTED, align: "center",
   });
-  pageNumber(s, 9);
+  pageNumber(s, 10);
 }
 
 // =====================================================================
-// SLIDE 10 - MODELE FINAL + FEATURE IMPORTANCE
+// SLIDE 11 - MODELE FINAL + FEATURE IMPORTANCE
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -436,11 +481,11 @@ function bulletBlock(slide, items, opts = {}) {
   ], { x: 0.6, y: 5.3, w: 6.3, h: 1.5, fontSize: 12.5, spaceAfter: 10 });
 
   s.addImage({ path: FIG("07_feature_importance.png"), x: 7.25, y: 1.9, w: 5.5, h: 4.95 });
-  pageNumber(s, 10);
+  pageNumber(s, 11);
 }
 
 // =====================================================================
-// SLIDE 11 - ANALYSE CRITIQUE
+// SLIDE 12 - ANALYSE CRITIQUE
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -465,11 +510,11 @@ function bulletBlock(slide, items, opts = {}) {
     "Donnees de 2019 : prix absolus non actualises",
     "Pas de base de donnees persistante pour l'app (limite de portee du TP)",
   ], { x: 7.1, y: 2.65, w: 5.4, h: 3.7, fontSize: 13, spaceAfter: 12, color: INK });
-  pageNumber(s, 11);
+  pageNumber(s, 12);
 }
 
 // =====================================================================
-// SLIDE 12 - DEMO APPLICATION
+// SLIDE 13 - DEMO APPLICATION
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -508,11 +553,11 @@ function bulletBlock(slide, items, opts = {}) {
     s.addText(m[0], { x: mx, y: 5.25, w: 2.85, h: 0.5, isTextBox: true, margin: 0, fontFace: "Calibri", fontSize: 11, color: "CFD5EE" });
     mx += 2.95;
   });
-  pageNumber(s, 12);
+  pageNumber(s, 13);
 }
 
 // =====================================================================
-// SLIDE 13 - DIFFICULTES & SOLUTIONS
+// SLIDE 14 - DIFFICULTES & SOLUTIONS
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -535,11 +580,11 @@ function bulletBlock(slide, items, opts = {}) {
     s.addText(r[1], { x: 7.1, y, w: 5.4, h: 0.85, isTextBox: true, margin: 0, fontFace: "Calibri", fontSize: 12.5, color: "1E7A3E", valign: "middle" });
     y += 1.0;
   });
-  pageNumber(s, 13);
+  pageNumber(s, 14);
 }
 
 // =====================================================================
-// SLIDE 14 - CONCLUSION & PERSPECTIVES
+// SLIDE 15 - CONCLUSION & PERSPECTIVES
 // =====================================================================
 {
   const s = pres.addSlide();
@@ -565,11 +610,11 @@ function bulletBlock(slide, items, opts = {}) {
     "Deploiement cloud avec base de donnees persistante",
   ], { x: 7.1, y: 2.65, w: 5, h: 2.7, fontSize: 13, color: WHITE, spaceAfter: 12 });
 
-  pageNumber(s, 14);
+  pageNumber(s, 15);
 }
 
 // =====================================================================
-// SLIDE 15 - MERCI
+// SLIDE 16 - MERCI
 // =====================================================================
 {
   const s = pres.addSlide();

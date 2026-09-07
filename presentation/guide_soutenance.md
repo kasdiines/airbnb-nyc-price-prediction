@@ -181,13 +181,51 @@ XGBoost est une version très optimisée et performante de cette idée de boosti
 
 > "Mon projet prédit le prix d'une nuit sur Airbnb à New York, à partir de caractéristiques comme le type de logement, la localisation et la popularité de l'annonce — sans utiliser de photos ni de texte. J'ai comparé 12 algorithmes de Machine Learning avec un protocole rigoureux et identique pour tous, optimisé les hyperparamètres des trois meilleurs, et développé une application interactive qui permet d'explorer les données, d'entraîner un modèle au choix, et de tester une prédiction en temps réel sur une carte. Le meilleur modèle, XGBoost optimisé, explique 45 % de la variation du prix avec une erreur moyenne d'environ 48 dollars par nuit."
 
-## 2.2 Le dataset — ce qu'il faut savoir
+## 2.2 La veille scientifique — ce que dit la littérature, et pourquoi ces outils
+
+Avant de coder, il faut situer son projet par rapport à l'existant — c'est ce qu'on
+appelle la veille scientifique et technique (section 2 du rapport, une partie
+obligatoire du cahier des charges).
+
+**Ce que dit la littérature sur la prédiction de prix immobilier :**
+- Les approches historiques (régression hédonique) décomposent le prix en une
+  somme pondérée de caractéristiques — simples et interprétables, mais
+  incapables de capturer les interactions entre variables.
+- Depuis les années 2000, les méthodes d'ensemble à base d'arbres (Random
+  Forest — Breiman, 2001 ; XGBoost — Chen & Guestrin, 2016) se sont imposées
+  comme état de l'art sur les données tabulaires, car elles gèrent nativement
+  les non-linéarités et interactions.
+- Sur ce même dataset spécifiquement, les travaux publiés rapportent
+  généralement un R² entre 0,5 et 0,65 lorsqu'on n'utilise pas les avis
+  textuels ni les photos — une limite structurelle que ton propre résultat
+  (R² = 0,45) confirme et respecte.
+
+**Le benchmark des outils** — pour chaque brique technique, plusieurs options
+ont été comparées avant de choisir (détail dans le rapport, section 2.2) :
+- **Machine Learning** : scikit-learn (retenu, écosystème mature) vs
+  TensorFlow/PyTorch (écarté, surdimensionné pour un problème de régression
+  tabulaire de cette taille).
+- **Interface graphique** : Streamlit (retenu, développement rapide en pur
+  Python) vs Dash (plus flexible mais plus long à mettre en place) vs
+  application web classique React + API (beaucoup trop long pour le temps
+  imparti).
+- **Cartographie** : Plotly (retenu pour l'affichage, cartes interactives
+  simples) et Folium (retenu spécifiquement pour l'onglet Test, car c'est la
+  seule librairie testée qui permette de récupérer les coordonnées d'un clic
+  utilisateur dans Streamlit).
+
+**Phrase à retenir pour l'oral** : *"Je ne suis pas partie de zéro : la
+littérature confirme que les méthodes à base d'arbres dominent sur ce type de
+données, et mon benchmark de 12 modèles retrouve exactement cette hiérarchie
+— ce qui valide à la fois mon protocole et les résultats de la littérature."*
+
+## 2.3 Le dataset — ce qu'il faut savoir
 
 - Source : Kaggle, *New York City Airbnb Open Data* — c'est le dataset précis demandé dans ton sujet de projet.
 - 48 895 annonces, 16 colonnes de départ : identifiant, hôte, arrondissement (`neighbourhood_group`), quartier (`neighbourhood`), latitude/longitude, type de logement (`room_type`), prix, nuits minimum, nombre d'avis, date du dernier avis, avis par mois, nombre d'annonces de l'hôte, disponibilité annuelle.
 - **Il n'y a ni photo, ni texte de description, ni note moyenne des avis.** C'est important à dire toi-même au jury avant qu'on te le reproche : ça explique pourquoi le modèle ne peut pas tout deviner parfaitement.
 
-## 2.3 Le nettoyage des données (prétraitement)
+## 2.4 Le nettoyage des données (prétraitement)
 
 Avant de donner les données à un modèle, il faut les "nettoyer" — comme on ne cuisine pas des légumes sans les laver avant.
 
@@ -205,7 +243,7 @@ Avant de donner les données à un modèle, il faut les "nettoyer" — comme on 
 - Le type de logement (3 catégories) et l'arrondissement (5 catégories) sont transformés en colonnes de 0 et 1 (une colonne par catégorie) — ça s'appelle le **one-hot encoding**. Exemple : la colonne "Entire home/apt" vaut 1 si c'est un logement entier, 0 sinon.
 - Le quartier (`neighbourhood`) a **221 valeurs différentes** — trop pour faire un one-hot (ça créerait 221 colonnes, la plupart remplies de zéros). À la place, on remplace chaque quartier par **sa fréquence** : la proportion d'annonces qui se trouvent dans ce quartier par rapport à toutes les annonces. Un quartier très demandé aura une fréquence plus élevée qu'un quartier rare.
 
-## 2.4 L'analyse exploratoire — comprendre avant de modéliser
+## 2.5 L'analyse exploratoire — comprendre avant de modéliser
 
 Avant de lancer des modèles, on regarde les données "à l'œil" avec des graphiques, pour se faire une première idée.
 
@@ -214,7 +252,7 @@ Avant de lancer des modèles, on regarde les données "à l'œil" avec des graph
 - **Le prix par type de logement** : un logement entier (160$ médian) coûte 2 à 3 fois plus qu'une chambre privée (70$) ou partagée (~45$).
 - **La corrélation** : `distance_center_km` a la corrélation la plus forte avec le prix parmi les variables numériques (-0,31 : plus on s'éloigne du centre, moins c'est cher en moyenne), mais cette corrélation reste modérée — ça annonce déjà que le modèle ne pourra pas tout expliquer avec les variables disponibles.
 
-## 2.5 Comparer 12 modèles — le cœur du projet
+## 2.6 Comparer 12 modèles — le cœur du projet
 
 Pour que la comparaison soit honnête, **tous les modèles reçoivent exactement les mêmes données, dans les mêmes conditions** : mêmes variables, même découpage 80/20 train/test, même validation croisée à 5 plis. Sinon, ce serait comme comparer deux étudiant·e·s qui n'ont pas passé le même examen.
 
@@ -236,7 +274,7 @@ Voici le classement (RMSE sur le jeu de test — plus c'est bas, mieux c'est) :
 
 **Ce qu'il faut retenir et savoir expliquer** : les 3 premiers sont tous des méthodes à base de **plusieurs arbres combinés** (Random Forest, Extra Trees, XGBoost). Elles gagnent parce que la relation entre le prix et les caractéristiques n'est pas une simple addition (ce que fait la régression linéaire) — il y a des **interactions** : par exemple, être loin du centre ne fait pas baisser le prix de la même façon selon que le logement est entier ou une simple chambre. Les modèles à base d'arbres peuvent capturer ce genre de nuance ; les modèles linéaires, non.
 
-## 2.6 Optimiser les 3 meilleurs modèles
+## 2.7 Optimiser les 3 meilleurs modèles
 
 On ne perd pas de temps à optimiser les modèles les moins bons (ça ne changerait pas le classement). On prend les 3 premiers (XGBoost, Extra Trees, Random Forest) et on teste, pour chacun, **12 combinaisons différentes de réglages** (hyperparamètres), en utilisant une méthode appelée `RandomizedSearchCV`.
 
@@ -248,7 +286,7 @@ On ne perd pas de temps à optimiser les modèles les moins bons (ça ne changer
 
 Cela améliore légèrement le score : RMSE de 85,05$ à 84,49$ (amélioration de 0,66%). **Ce gain est petit, et c'est normal** : les réglages par défaut des librairies sont déjà bien pensés. Le vrai gain de performance vient du choix de la famille d'algorithme (arbres plutôt que linéaire), pas du réglage fin.
 
-## 2.7 L'importance des variables — qu'est-ce qui influence vraiment le prix ?
+## 2.8 L'importance des variables — qu'est-ce qui influence vraiment le prix ?
 
 Une fois le modèle final entraîné, on peut lui demander : "sur quelles variables t'es-tu le plus appuyé pour faire tes prédictions ?" C'est ce qu'on appelle la **feature importance**.
 
@@ -256,7 +294,7 @@ Une fois le modèle final entraîné, on peut lui demander : "sur quelles variab
 
 **Ce que ça veut dire en langage simple** : le type de logement compte beaucoup plus que l'endroit où il se trouve dans Manhattan/Brooklyn/etc. Un logement entier vaut nettement plus cher, où qu'il soit, alors que la localisation ne fait varier le prix qu'à la marge en comparaison.
 
-## 2.8 L'application (l'interface graphique)
+## 2.9 L'application (l'interface graphique)
 
 L'application est construite avec **Streamlit**, un outil qui permet de créer une interface web interactive en écrivant seulement du Python (pas besoin de savoir faire des sites web).
 
@@ -291,24 +329,26 @@ Trois onglets :
 
 # PARTIE 4 — Script minute par minute pour tes 12 minutes
 
-Avec 15 slides en 12 minutes, tu as en moyenne **48 secondes par slide** — c'est très rapide. Voici une répartition réaliste qui priorise les slides les plus importantes. Adapte les phrases avec tes propres mots, ne les récite pas mot à mot.
+Le deck fait maintenant **16 slides** (une slide "Veille scientifique et technique" a été ajoutée — elle correspond à la section 2 du rapport, obligatoire dans le cahier des charges, et manquait à l'oral). Avec 16 slides en 12 minutes, tu as en moyenne **45 secondes par slide** — c'est rapide, donc va à l'essentiel à l'oral et garde le détail pour les questions. Le tableau ci-dessous totalise **11 min 20**, ce qui te laisse volontairement une quarantaine de secondes de marge (transitions, hésitations, une question posée en cours de route). Adapte les phrases avec tes propres mots, ne les récite pas mot à mot.
 
 | Min | Slide(s) | Ce que tu dis (idée à retenir, pas à réciter) |
 |---|---|---|
-| 0:00-0:40 | 1. Titre | Dis le pitch de 30 secondes (section 2.1). Regarde le jury, pas tes slides. |
-| 0:40-1:10 | 2. Sommaire | Annonce très vite le plan en une phrase : "je vais présenter le contexte, les données, ma méthode, mes résultats, et les limites." |
-| 1:10-2:10 | 3-4. Contexte, problématique, objectifs | Le problème (fixer un prix sans référence objective) et tes 5 objectifs. Va vite sur la liste, insiste sur "comparer au moins 10 modèles" et "interface graphique". |
-| 2:10-2:50 | 5. Dataset | Donne juste les chiffres clés : 48 895 annonces, 16 variables, 5 arrondissements, 221 quartiers. Précise à l'oral : "pas de photos ni de texte, ce qui limite la précision atteignable — j'y reviendrai." |
-| 2:50-3:50 | 6. Analyse exploratoire | Montre les 2 graphiques, dis les deux constats clés (Manhattan >> Bronx, logement entier x2-3 plus cher que chambre). |
-| 3:50-4:50 | 7. Prétraitement | Explique en 1 phrase chaque point : valeurs aberrantes retirées (1%), distance au centre calculée, encodage par fréquence pour les 221 quartiers. Pas besoin de détailler haversine à l'oral, garde ça pour une question. |
-| 4:50-5:30 | 8. Architecture | Montre le schéma, dis juste "voici le pipeline : données brutes, nettoyage, comparaison de modèles, application". |
-| 5:30-6:45 | 9. Comparaison des 12 modèles | LA slide la plus importante. Dis : "j'ai testé 12 algorithmes avec un protocole identique. Les 3 meilleurs sont tous des méthodes à base d'arbres combinés (les 3 barres coral), loin devant les modèles linéaires (à droite)." Explique en 1 phrase pourquoi (interactions non-linéaires, section 2.5). |
-| 6:45-7:45 | 10. Modèle final XGBoost | Donne les 4 métriques en les traduisant : "mon modèle se trompe en moyenne de 48$ par nuit, et explique 45% de la variation du prix." Mentionne le résultat de feature importance (logement entier = 59% du poids). |
-| 7:45-8:30 | 11. Analyse critique | Dis les points forts vite, puis ATTARDE-toi sur les limites — ça montre ta maturité. "Le R² de 0,45 s'explique par l'absence de photos et de texte dans les données." |
-| 8:30-9:45 | 12. Démo application | Si possible, fais une VRAIE démo live plutôt que juste montrer la slide (bien plus impressionnant). Sinon, présente les 3 onglets et l'exemple de prédiction (166$ vs 87$ de moyenne). |
-| 9:45-10:30 | 13. Difficultés | Choisis 2-3 difficultés max à raconter à l'oral (SVR trop lent, bug d'import corrigé), le reste sert pour les questions. |
-| 10:30-11:30 | 14. Conclusion et perspectives | Reprends les objectifs atteints, cite 2 perspectives (avis textuels + photos, déploiement cloud). |
-| 11:30-12:00 | 15. Merci | Remercie, invite aux questions, garde le lien GitHub affiché. |
+| 0:00-0:35 | 1. Titre | Dis le pitch de 30 secondes (section 2.1). Regarde le jury, pas tes slides. |
+| 0:35-1:00 | 2. Sommaire | Annonce très vite le plan en une phrase : "je vais présenter le contexte, la veille scientifique, les données, ma méthode, mes résultats, et les limites." |
+| 1:00-1:45 | 3. Contexte et problématique | Le problème : un hôte fixe son prix sans référence objective. Question centrale : peut-on prédire le prix à partir des seules caractéristiques structurelles ? |
+| 1:45-2:20 | 4. Objectifs | Va vite sur la liste des 5 objectifs, insiste sur "comparer au moins 10 modèles", "au moins 4 métriques" et "interface graphique". |
+| 2:20-2:55 | 5. Veille scientifique et technique | En une phrase : "la littérature montre que les méthodes à base d'arbres (Random Forest, XGBoost) dominent sur ce type de données, avec un R² qui plafonne entre 0,5 et 0,65 sans texte ni photos — ça confirme ce que j'ai retrouvé. J'ai choisi scikit-learn et XGBoost pour le Machine Learning, Streamlit pour l'interface, et Folium spécifiquement parce que c'est la seule librairie qui permet de capter un clic utilisateur sur la carte." |
+| 2:55-3:25 | 6. Dataset | Donne juste les chiffres clés : 48 895 annonces, 16 variables, 5 arrondissements, 221 quartiers. Précise à l'oral : "pas de photos ni de texte, ce qui limite la précision atteignable — j'y reviendrai." |
+| 3:25-4:15 | 7. Analyse exploratoire | Montre les 2 graphiques, dis les deux constats clés (Manhattan >> Bronx, logement entier x2-3 plus cher que chambre). |
+| 4:15-5:00 | 8. Prétraitement | Explique en 1 phrase chaque point : valeurs aberrantes retirées (1%), distance au centre calculée, encodage par fréquence pour les 221 quartiers. Pas besoin de détailler haversine à l'oral, garde ça pour une question. |
+| 5:00-5:25 | 9. Architecture | Montre le schéma, dis juste "voici le pipeline : données brutes, nettoyage, comparaison de modèles, application". |
+| 5:25-6:40 | 10. Comparaison des 12 modèles | LA slide la plus importante. Dis : "j'ai testé 12 algorithmes avec un protocole identique. Les 3 meilleurs sont tous des méthodes à base d'arbres combinés (les 3 barres coral), loin devant les modèles linéaires (à droite)." Explique en 1 phrase pourquoi (interactions non-linéaires, section 2.5). |
+| 6:40-7:40 | 11. Modèle final XGBoost | Donne les 4 métriques en les traduisant : "mon modèle se trompe en moyenne de 48$ par nuit, et explique 45% de la variation du prix." Mentionne le résultat de feature importance (logement entier = 59% du poids). |
+| 7:40-8:20 | 12. Analyse critique | Dis les points forts vite, puis ATTARDE-toi sur les limites — ça montre ta maturité. "Le R² de 0,45 s'explique par l'absence de photos et de texte dans les données." |
+| 8:20-9:35 | 13. Démo application | Si possible, fais une VRAIE démo live plutôt que juste montrer la slide (bien plus impressionnant). Sinon, présente les 3 onglets et l'exemple de prédiction (150$ vs 118$ de moyenne Brooklyn, avec l'arrondissement déduit automatiquement du clic sur la carte). |
+| 9:35-10:05 | 14. Difficultés | Choisis 2-3 difficultés max à raconter à l'oral (SVR trop lent, bug d'import corrigé), le reste sert pour les questions. |
+| 10:05-11:00 | 15. Conclusion et perspectives | Reprends les objectifs atteints, cite 2 perspectives (avis textuels + photos, déploiement cloud). |
+| 11:00-11:20 | 16. Merci | Remercie, invite aux questions, garde le lien GitHub affiché. |
 
 **Conseil important** : entraîne-toi au moins 2 fois en te chronométrant. Si tu dépasses 12 minutes, coupe en premier dans les slides 7 (prétraitement, détail technique) et 13 (difficultés) — le jury peut très bien te questionner dessus après.
 
