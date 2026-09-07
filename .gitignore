@@ -7,5 +7,7 @@ node_modules/
 presentation/*.pdf
 reports/gh_auth_log.txt
 reports/streamlit_log.txt
+presentation/guide_soutenance.md
+presentation/guide_soutenance.docx
 venv/
 ~$*.docx

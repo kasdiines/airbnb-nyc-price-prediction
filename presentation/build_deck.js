@@ -124,6 +124,10 @@ function bulletBlock(slide, items, opts = {}) {
     { text: "Projet Machine Learning - Donnees Kaggle NYC Airbnb Open Data", options: { color: "CFD5EE", fontSize: 12, breakLine: true } },
     { text: "github.com/kasdiines/airbnb-nyc-price-prediction", options: { color: GOLD, fontSize: 12 } },
   ], { x: 0.6, y: 5.85, w: 9, h: 1.2, isTextBox: true, margin: 0, fontFace: "Calibri" });
+
+  s.addNotes(
+    "[~35s] Bonjour, je m'appelle Ines Kasdi. Mon projet predit le prix d'une nuit sur Airbnb a New York, a partir de caracteristiques comme le type de logement, la localisation et la popularite de l'annonce -- sans utiliser ni photos ni texte. J'ai compare douze algorithmes de Machine Learning avec un protocole rigoureux et identique pour tous, optimise les hyperparametres des trois meilleurs, et developpe une application interactive qui permet d'explorer les donnees, d'entrainer un modele au choix, et de tester une prediction en temps reel sur une carte. Le meilleur modele, XGBoost optimise, explique 45% de la variation du prix avec une erreur moyenne d'environ 48 dollars par nuit."
+  );
 }
 
 // =====================================================================
@@ -161,6 +165,9 @@ function bulletBlock(slide, items, opts = {}) {
     s.addShape("line", { x, y: y + rowH - 0.12, w: colW, h: 0, line: { color: "E2E4EE", width: 1 } });
   });
   pageNumber(s, 2);
+  s.addNotes(
+    "[~25s] Je vais presenter le contexte et la problematique, un point de veille scientifique sur les technologies choisies, les donnees et l'analyse exploratoire, ma methodologie de pretraitement et de modelisation, la comparaison de douze algorithmes et son optimisation, les resultats avec une analyse critique honnete et une demonstration de l'application, puis je terminerai sur les difficultes rencontrees et les perspectives."
+  );
 }
 
 // =====================================================================
@@ -201,6 +208,9 @@ function bulletBlock(slide, items, opts = {}) {
     cy += 1.45;
   });
   pageNumber(s, 3);
+  s.addNotes(
+    "[~45s] Airbnb compte des dizaines de milliers d'annonces a New York, avec des prix tres heterogenes selon le quartier, le type de logement et la popularite de l'hote. Un hote fixe generalement son prix sans reference objective, et un voyageur ne sait pas si le tarif propose est coherent avec le marche local. Ma question centrale : peut-on predire le prix d'une annonce a partir de ses seules caracteristiques structurelles et geographiques ? Trois defis principaux : la variable quartier a 221 modalites differentes, la relation entre prix et caracteristiques n'est pas lineaire, et surtout -- il faut le dire soi-meme avant qu'on me le reproche -- je n'ai ni photos ni texte, donc une partie du prix restera structurellement inexpliquee."
+  );
 }
 
 // =====================================================================
@@ -233,6 +243,9 @@ function bulletBlock(slide, items, opts = {}) {
     y += 0.92;
   });
   pageNumber(s, 4);
+  s.addNotes(
+    "[~35s] Cinq objectifs concrets : pretraiter rigoureusement les donnees -- valeurs aberrantes, valeurs manquantes, feature engineering ; comparer au moins dix algorithmes -- j'en ai teste douze ; optimiser les hyperparametres des meilleurs modeles ; evaluer avec au moins quatre metriques et une validation croisee -- j'en ai utilise quatre plus la validation croisee a cinq plis ; et enfin construire une interface graphique complete permettant l'exploration, l'entrainement et la prediction en temps reel avec une carte."
+  );
 }
 
 // =====================================================================
@@ -278,6 +291,9 @@ function bulletBlock(slide, items, opts = {}) {
     ty += 1.05;
   });
   pageNumber(s, 5);
+  s.addNotes(
+    "[~35s] Avant de coder, j'ai situe mon projet par rapport a l'existant. La litterature confirme que les methodes a base d'arbres combines -- Random Forest de Breiman, XGBoost de Chen et Guestrin -- dominent sur ce type de donnees, avec un R2 qui plafonne generalement entre 0,5 et 0,65 sans texte ni photos : c'est exactement ce que je retrouve dans mes propres resultats, ce qui valide a la fois mon protocole et la litterature. Cote outils, j'ai choisi scikit-learn et XGBoost pour le Machine Learning -- standards du secteur --, Streamlit pour l'interface -- developpement rapide en pur Python --, et Folium specifiquement parce que c'est la seule librairie testee qui permette de capter un clic utilisateur sur la carte."
+  );
 }
 
 // =====================================================================
@@ -318,6 +334,9 @@ function bulletBlock(slide, items, opts = {}) {
     });
   });
   pageNumber(s, 6);
+  s.addNotes(
+    "[~30s] Le dataset New York City Airbnb Open Data, sur Kaggle -- exactement celui demande dans mon sujet -- contient 48 895 annonces brutes et 16 variables : localisation, type de logement, prix, avis, disponibilite. Apres nettoyage -- suppression des prix aberrants, environ 1% des lignes -- il reste 48 389 annonces, reparties sur 5 arrondissements et 221 quartiers differents. Je le repete : pas de photos, pas de texte de description, pas de note moyenne des avis -- ca limite volontairement ce qu'un modele peut deviner, j'y reviendrai dans l'analyse critique."
+  );
 }
 
 // =====================================================================
@@ -339,6 +358,9 @@ function bulletBlock(slide, items, opts = {}) {
     { text: "un logement entier coute 2 a 3 fois plus qu'une chambre privee ou partagee.", options: { color: INK } },
   ], { x: 0.6, y: 5.55, w: 12, h: 1.2, isTextBox: true, margin: 0, fontFace: "Calibri", fontSize: 14, lineSpacing: 22 });
   pageNumber(s, 7);
+  s.addNotes(
+    "[~50s] Avant de modeliser, j'ai explore les donnees a l'oeil. Deux constats dominent tout le reste. Premierement, l'arrondissement : le prix median a Manhattan, 149 dollars 50, est nettement superieur a celui du Bronx, 68 dollars -- pres du double. Deuxiemement, et c'est encore plus marque : le type de logement. Un logement entier coute 2 a 3 fois plus cher qu'une chambre privee ou une chambre partagee. Ces deux constats visuels, tres simples, se retrouveront confirmes plus tard de facon quantitative dans l'importance des variables du modele final -- c'est deja un premier indice fort de ce qui va suivre."
+  );
 }
 
 // =====================================================================
@@ -360,6 +382,9 @@ function bulletBlock(slide, items, opts = {}) {
 
   s.addImage({ path: FIG("04_heatmap_correlations.png"), x: 7.6, y: 1.85, w: 5.1, h: 4.9 });
   pageNumber(s, 8);
+  s.addNotes(
+    "[~45s] Quatre etapes de pretraitement. D'abord, j'ai supprime les prix nuls et extremes avec des percentiles -- 0,5% de chaque cote -- soit 492 lignes retirees sur 48 895. Ensuite, j'ai cree de nouvelles variables : la plus importante est distance_center_km, la distance a vol d'oiseau -- calculee avec la formule de haversine, qui tient compte de la courbure de la Terre -- entre chaque annonce et le centre de Manhattan. Pour le quartier, qui a 221 valeurs differentes, j'ai utilise un encodage par frequence plutot qu'un one-hot classique, pour eviter d'exploser le nombre de colonnes. Le type de logement et l'arrondissement, eux, ont peu de categories donc sont encodes classiquement en one-hot."
+  );
 }
 
 // =====================================================================
@@ -409,6 +434,9 @@ function bulletBlock(slide, items, opts = {}) {
     fontFace: "Calibri", italic: true, fontSize: 13, color: MUTED, align: "center",
   });
   pageNumber(s, 9);
+  s.addNotes(
+    "[~25s] Voici le pipeline complet : les donnees brutes de Kaggle passent par le script de pretraitement, puis par l'analyse exploratoire et la comparaison des douze modeles, et enfin par l'application Streamlit. Point important a mentionner : le meme protocole s'applique a tous les modeles -- decoupage 80/20 train-test, validation croisee a 5 plis, graine aleatoire fixee a 42 -- pour garantir une comparaison honnete et reproductible."
+  );
 }
 
 // =====================================================================
@@ -455,6 +483,9 @@ function bulletBlock(slide, items, opts = {}) {
     fontFace: "Calibri", italic: true, fontSize: 12, color: MUTED, align: "center",
   });
   pageNumber(s, 10);
+  s.addNotes(
+    "[~75s] C'est la slide la plus importante de ma soutenance. J'ai teste douze algorithmes avec un protocole strictement identique : regression lineaire et ses variantes regularisees, KNN, arbre de decision, les ensembles Random Forest et Extra Trees, le boosting avec Gradient Boosting et XGBoost, un SVR, et un reseau de neurones. Regardez le graphique : les trois meilleurs modeles, en corail, sont XGBoost, Extra Trees et Random Forest -- tous des methodes a base d'arbres combines, avec des RMSE tres proches, autour de 85 dollars. Ils devancent nettement les modeles lineaires, a droite, autour de 93 a 98 dollars. Pourquoi ? Parce que la relation entre le prix et les caracteristiques n'est pas une simple addition : il y a des interactions, par exemple l'effet de la distance au centre ne joue pas pareil selon le type de logement, et seuls les modeles a base d'arbres peuvent capturer ca. Meme le reseau de neurones ne fait pas mieux que les arbres ici : sur ce volume de donnees tabulaires, les arbres restent l'etat de l'art."
+  );
 }
 
 // =====================================================================
@@ -482,6 +513,9 @@ function bulletBlock(slide, items, opts = {}) {
 
   s.addImage({ path: FIG("07_feature_importance.png"), x: 7.25, y: 1.9, w: 5.5, h: 4.95 });
   pageNumber(s, 11);
+  s.addNotes(
+    "[~60s] J'ai ensuite optimise les hyperparametres des trois meilleurs modeles avec une recherche aleatoire, RandomizedSearchCV. Le modele final est XGBoost, avec 400 arbres, une profondeur maximale de 6, un taux d'apprentissage de 0,03 et un sous-echantillonnage de 0,7. En dollars concrets : mon modele se trompe en moyenne de 48 dollars 35 par nuit -- c'est la MAE -- et explique 45,3% de la variation du prix -- c'est le R2. Le gain de l'optimisation est modeste, moins de 1%, ce qui montre que le vrai levier de performance est le choix de la famille d'algorithme, pas le reglage fin. Dernier point tres important : sur ce modele final, la variable 'logement entier' represente a elle seule 59,5% de l'importance totale -- tres loin devant la localisation. Le type de logement compte donc bien plus que l'endroit ou il se trouve."
+  );
 }
 
 // =====================================================================
@@ -511,6 +545,9 @@ function bulletBlock(slide, items, opts = {}) {
     "Pas de base de donnees persistante pour l'app (limite de portee du TP)",
   ], { x: 7.1, y: 2.65, w: 5.4, h: 3.7, fontSize: 13, spaceAfter: 12, color: INK });
   pageNumber(s, 12);
+  s.addNotes(
+    "[~40s] Rapidement sur les points forts : une chaine complete de bout en bout, un protocole reproductible identique pour tous les modeles, un feature engineering geographique original, et une vraie interface graphique. Mais j'insiste davantage sur les limites, parce que c'est ca qui montre la maturite d'une analyse : un R2 de 0,45 s'explique par l'absence de photos et de texte dans les donnees -- ce n'est pas un defaut de modelisation, c'est une limite structurelle de l'information disponible. Le SVR a ete entraine sur un sous-echantillon pour des raisons de temps de calcul. Et les donnees datent de 2019, donc les prix absolus ne sont plus forcement d'actualite en 2026, meme si les relations structurelles restent valables."
+  );
 }
 
 // =====================================================================
@@ -554,6 +591,9 @@ function bulletBlock(slide, items, opts = {}) {
     mx += 2.95;
   });
   pageNumber(s, 13);
+  s.addNotes(
+    "[~75s] Si possible, je bascule maintenant sur l'application en direct plutot que de rester sur cette slide -- une vraie demo est bien plus parlante. Trois onglets : Exploration des donnees, avec les statistiques et les graphiques ; Entrainement, ou je choisis un modele parmi neuf et je regle ses parametres avec des curseurs ; et Test/Prediction, ou je clique sur une carte pour choisir un emplacement -- l'arrondissement et le quartier sont deduits automatiquement du point clique -- je remplis quelques caracteristiques, et j'obtiens une prediction en temps reel comparee au prix moyen de l'arrondissement. Exemple reel : pour un logement entier dans le Bronx, le modele predit 166 dollars la nuit, contre 87 dollars de moyenne dans cet arrondissement -- un ecart de plus 79 dollars, coherent avec le poids tres fort du type de logement qu'on a vu dans l'importance des variables."
+  );
 }
 
 // =====================================================================
@@ -581,6 +621,9 @@ function bulletBlock(slide, items, opts = {}) {
     y += 1.0;
   });
   pageNumber(s, 14);
+  s.addNotes(
+    "[~30s] Je ne raconte que 2 ou 3 difficultes a l'oral, le reste sert de reserve pour les questions. Par exemple : le SVR etait beaucoup trop lent sur les 38 700 lignes du jeu d'entrainement, sa complexite augmente au carre voire au cube avec le nombre de lignes -- je l'ai donc entraine sur un sous-echantillon de 6000 lignes, en le documentant clairement plutot que de le cacher. Et l'application a d'abord plante avec une erreur d'import, parce que Streamlit n'ajoute pas automatiquement la racine du projet au chemin Python -- j'ai corrige ca en une ligne."
+  );
 }
 
 // =====================================================================
@@ -611,6 +654,9 @@ function bulletBlock(slide, items, opts = {}) {
   ], { x: 7.1, y: 2.65, w: 5, h: 2.7, fontSize: 13, color: WHITE, spaceAfter: 12 });
 
   pageNumber(s, 15);
+  s.addNotes(
+    "[~55s] Pour conclure : tous les objectifs du cahier des charges ont ete atteints ou depasses. Douze modeles compares au lieu de dix demandes, quatre metriques avec validation croisee a cinq plis, des hyperparametres optimises pour un modele final XGBoost a 0,453 de R2, et une interface graphique complete couvrant exploration, entrainement et prediction geolocalisee. Comme perspectives : enrichir le dataset avec les avis textuels et les photos, utiliser un encodage cible plus sophistique pour le quartier, tester du stacking entre les meilleurs modeles, et deployer l'application sur une infrastructure cloud avec une base de donnees persistante pour un usage reel."
+  );
 }
 
 // =====================================================================
@@ -638,6 +684,10 @@ function bulletBlock(slide, items, opts = {}) {
     x: 0.6, y: 5.8, w: 12, h: 0.4, isTextBox: true, margin: 0,
     fontFace: "Calibri", fontSize: 12, color: "CFD5EE", align: "center",
   });
+
+  s.addNotes(
+    "[~20s] Merci pour votre attention, je suis prete a repondre a vos questions. (Rappel pour toi : si tu bloques sur une question, dis honnetement 'c'est une limite que j'ai identifiee mais pas approfondie dans le temps imparti, une piste serait de...' plutot que d'inventer une reponse.)"
+  );
 }
 
 pres.writeFile({ fileName: path.resolve(__dirname, "soutenance_airbnb.pptx") }).then(() => {
