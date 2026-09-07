@@ -6,7 +6,6 @@ data/airbnb_clean.csv
 node_modules/
 presentation/*.pdf
 reports/gh_auth_log.txt
-reports/rapport_final.docx
 reports/streamlit_log.txt
 venv/
 ~$*.docx

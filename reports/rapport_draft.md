@@ -1,15 +1,61 @@
 ---
 title: "Prédiction des prix de location Airbnb à New York City"
+subtitle: "Comparaison de 12 algorithmes de Machine Learning et développement d'une application interactive de prédiction de prix"
+author: "Ines Kasdi"
+date: "Formation M1 I2A — Année universitaire 2025-2026"
+lang: "fr-FR"
 ---
 
-# Prédiction des prix de location Airbnb à New York City
+```{=openxml}
+<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="600"/></w:pPr>
+<w:r><w:rPr><w:sz w:val="24"/></w:rPr><w:t>Dépôt GitHub du projet :</w:t></w:r>
+</w:p>
+<w:p><w:pPr><w:jc w:val="center"/></w:pPr>
+<w:r><w:rPr><w:sz w:val="24"/><w:color w:val="2563EB"/></w:rPr>
+<w:t>https://github.com/kasdiines/airbnb-nyc-price-prediction</w:t></w:r>
+</w:p>
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
-**Rapport de projet — Machine Learning appliqué à l'immobilier locatif**
+## Table des matières
 
-Auteur : Ines Kasdi
-Formation : M1 I2A
-Année universitaire : 2025-2026
-Dépôt GitHub : https://github.com/kasdiines/airbnb-nyc-price-prediction
+**1. Introduction**
+
+- 1.1 Contexte
+- 1.2 Problématique
+- 1.3 Objectifs
+- 1.4 Contributions
+- 1.5 Structure du rapport
+
+**2. Veille scientifique et technique**
+
+- 2.1 Revue de littérature
+- 2.2 Benchmark des solutions existantes
+- 2.3 Technologies retenues — argumentation des choix
+
+**3. Méthodologie de résolution**
+
+- 3.1 Analyse des besoins
+- 3.2 Conception
+- 3.3 Développement de la solution
+- 3.4 Résultats obtenus et analyses
+
+**4. Conclusion et perspectives**
+
+- 4.1 Bilan global du projet
+- 4.2 Retour sur les objectifs atteints
+- 4.3 Difficultés surmontées
+- 4.4 Perspectives futures
+
+**5. Bibliographie**
+
+**6. Annexes**
+
+- Annexe A — Environnement technique
+- Annexe B — Extrait du pipeline de prétraitement
+- Annexe C — Extrait de la comparaison de modèles
+- Annexe D — Structure de l'interface graphique
+- Annexe E — Glossaire
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
@@ -529,17 +575,17 @@ en évidence plusieurs constats structurants :
   Manhattan, avec toutefois une forte dispersion résiduelle à distance égale —
   signe que la localisation seule n'explique pas tout le prix.
 
-![Figure 1 — Distribution du prix et du log(prix)](figures/01_distribution_prix.png)
+![Figure 1 — Distribution du prix et du log(prix)](figures/01_distribution_prix.png){width=5.2in}
 
-![Figure 2 — Prix par arrondissement](figures/02_boxplot_prix_arrondissement.png)
+![Figure 2 — Prix par arrondissement](figures/02_boxplot_prix_arrondissement.png){width=5.2in}
 
-![Figure 3 — Prix par type de logement](figures/03_boxplot_prix_room_type.png)
+![Figure 3 — Prix par type de logement](figures/03_boxplot_prix_room_type.png){width=5.0in}
 
-![Figure 4 — Matrice de corrélation des variables numériques](figures/04_heatmap_correlations.png)
+![Figure 4 — Matrice de corrélation des variables numériques](figures/04_heatmap_correlations.png){width=4.8in}
 
-![Figure 5 — Répartition géographique des annonces (couleur = prix)](figures/05_carte_prix.png)
+![Figure 5 — Répartition géographique des annonces (couleur = prix)](figures/05_carte_prix.png){width=3.9in}
 
-![Figure 6 — Distance au centre de Manhattan vs log(prix)](figures/06_distance_vs_prix.png)
+![Figure 6 — Distance au centre de Manhattan vs log(prix)](figures/06_distance_vs_prix.png){width=5.0in}
 
 ### 3.3.2 Étape 2 — Comparaison des algorithmes
 
@@ -640,7 +686,7 @@ quantitativement l'observation qualitative faite lors de l'analyse
 exploratoire (section 3.3.1) : le type de logement est, de très loin, le
 facteur le plus déterminant du prix, devant la localisation géographique.
 
-![Figure 7 — Importance des variables du modèle XGBoost optimisé](figures/07_feature_importance.png)
+![Figure 7 — Importance des variables du modèle XGBoost optimisé](figures/07_feature_importance.png){width=5.0in}
 
 ### 3.3.4 Étape 4 — Développement de l'interface graphique
 
@@ -821,7 +867,7 @@ une **estimation indicative**, d'autant plus fiable que le logement se situe
 dans une gamme de prix standard (moins de 150 $/nuit), et à interpréter avec
 prudence pour les biens haut de gamme.
 
-![Figure 8 — Analyse des résidus du modèle XGBoost optimisé](figures/08_residus.png)
+![Figure 8 — Analyse des résidus du modèle XGBoost optimisé](figures/08_residus.png){width=5.0in}
 
 **Points forts.** Le projet couvre l'intégralité de la chaîne de traitement
 data science : prétraitement rigoureux et documenté, comparaison exhaustive de
@@ -929,10 +975,6 @@ prix absolus pertinentes pour un usage réel en 2026, au-delà de l'objectif
 pédagogique de ce projet.
 
 ---
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 
 # 5. Bibliographie
 
